@@ -1,5 +1,9 @@
 # إذاعة القرآن الكريم من القاهرة (quranmasr)
 
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f02da83c-0638-4de4-85e1-ab52f84a06a5/deploy-status)](https://app.netlify.com/projects/quranmasr/deploys)
+
+
 Arabic-first, SEO-friendly Next.js app for live Quran radio streaming from Cairo.
 
 ## Features
