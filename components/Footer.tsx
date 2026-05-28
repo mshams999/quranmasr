@@ -9,9 +9,6 @@ export function Footer() {
           <Link href="/privacy" className="hover:text-emerald-200">
             سياسة الخصوصية
           </Link>
-          <Link href="/contact" className="hover:text-emerald-200">
-            تواصل معنا
-          </Link>
         </nav>
       </div>
     </footer>

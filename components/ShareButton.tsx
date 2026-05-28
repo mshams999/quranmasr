@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { AnalyticsEvents, trackEvent } from "@/lib/analytics";
 import { RADIO_STREAM } from "@/lib/stream";
 
 type ShareButtonProps = {
@@ -23,7 +22,6 @@ export function ShareButton({ className = "" }: ShareButtonProps) {
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-        trackEvent(AnalyticsEvents.share, { method: "native" });
         return;
       } catch {
         /* user cancelled or unsupported */
@@ -32,7 +30,6 @@ export function ShareButton({ className = "" }: ShareButtonProps) {
 
     try {
       await navigator.clipboard.writeText(url);
-      trackEvent(AnalyticsEvents.share, { method: "clipboard" });
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {

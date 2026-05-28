@@ -10,11 +10,8 @@ Arabic-first, SEO-friendly Next.js app for live Quran radio streaming from Cairo
 
 - RTL Arabic UI with Cairo + Amiri fonts
 - HTML5 live audio player with status, volume, mute, and share
-- Listener heartbeats via `/api/listener` (Upstash Redis or in-memory fallback)
-- Metrics panel via `/api/metrics`
-- Curated social comments (`data/comments.json`)
+- Mobile navigation menu
 - SEO: metadata, Open Graph, Twitter cards, JSON-LD (`RadioStation`, `WebSite`)
-- Google Analytics 4 (page views + stream events)
 
 ## Setup
 
@@ -26,9 +23,7 @@ cp .env.example .env.local
 Edit `.env.local`:
 
 - `NEXT_PUBLIC_RADIO_STREAM_URL` — verified stream URL (required before production)
-- `NEXT_PUBLIC_SITE_URL` — canonical site URL
-- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — GA4 ID from [Google Analytics](https://analytics.google.com/)
-- `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` — optional, for live listener counts on the homepage
+- `NEXT_PUBLIC_SITE_URL` — canonical site URL (required for SEO, sitemap, and schema)
 
 ```bash
 npm run dev
@@ -64,18 +59,28 @@ netlify env:import .env.local
 netlify deploy --prod
 ```
 
-After the first deploy, update `NEXT_PUBLIC_SITE_URL` to your production domain and redeploy.
+After the first deploy, set `NEXT_PUBLIC_SITE_URL` to your production domain (e.g. `https://quranmasr.com`) and redeploy so sitemap, canonical URLs, and structured data rank correctly.
 
 Replace the stream URL with a **verified, licensed** production source before going public.
+
+## Google Search Console
+
+1. Deploy with `NEXT_PUBLIC_SITE_URL` set to your production domain (e.g. `https://quranmasr.com`).
+2. In [Google Search Console](https://search.google.com/search-console), add your domain or URL prefix property.
+3. Choose **HTML tag** verification, copy the `content` value, and set `GOOGLE_SITE_VERIFICATION` in Netlify env vars, then redeploy.
+4. Click **Verify** in Search Console.
+5. Submit your sitemap: `https://your-domain.com/sitemap.xml`
+6. Use **URL inspection** on the homepage and request indexing.
+
+Test structured data: [Rich Results Test](https://search.google.com/test/rich-results).
 
 ## Pages
 
 | Path | Description |
 |------|-------------|
-| `/` | Main player, metrics, comments |
+| `/` | Main player |
 | `/about` | About the station |
 | `/schedule` | Program schedule (placeholder) |
-| `/contact` | Social links |
 | `/privacy` | Privacy policy |
 
 ## Important
@@ -84,4 +89,4 @@ Before public launch, verify the stream source and broadcasting rights. Unoffici
 
 ## Stack
 
-Next.js App Router · TypeScript · Tailwind CSS · Google Analytics 4 · Upstash Redis
+Next.js App Router · TypeScript · Tailwind CSS

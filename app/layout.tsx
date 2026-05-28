@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { Amiri, Cairo } from "next/font/google";
 import { Footer } from "@/components/Footer";
-import { GoogleAnalyticsProvider } from "@/components/GoogleAnalyticsProvider";
 import { Header } from "@/components/Header";
-import {
-  defaultMetadata,
-  radioStationJsonLd,
-  webSiteJsonLd,
-} from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
+import { defaultMetadata, globalJsonLdGraph } from "@/lib/seo";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -30,23 +26,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = [radioStationJsonLd(), webSiteJsonLd()];
-
   return (
     <html
-      lang="ar"
+      lang="ar-EG"
       dir="rtl"
       className={`${cairo.variable} ${amiri.variable} h-full`}
     >
       <body className="flex min-h-full flex-col bg-[#06100c] font-sans text-emerald-50 antialiased">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <JsonLd data={globalJsonLdGraph()} />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
-        <GoogleAnalyticsProvider />
       </body>
     </html>
   );

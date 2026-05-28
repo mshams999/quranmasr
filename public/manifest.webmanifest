@@ -1,0 +1,20 @@
+{
+  "name": "إذاعة القرآن الكريم من القاهرة",
+  "short_name": "قرآن القاهرة",
+  "description": "بث مباشر لإذاعة القرآن الكريم من القاهرة — Quran Radio Egypt live stream.",
+  "lang": "ar-EG",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06100c",
+  "theme_color": "#059669",
+  "categories": ["music", "lifestyle"],
+  "icons": [
+    {
+      "src": "/og-image.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

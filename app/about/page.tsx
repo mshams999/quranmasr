@@ -1,41 +1,62 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbJsonLd, createPageMetadata } from "@/lib/seo";
 import { RADIO_STREAM } from "@/lib/stream";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "عن الإذاعة",
   description:
-    "تعرف على إذاعة القرآن الكريم من القاهرة — رسالتنا وبثنا المباشر للقرآن الكريم.",
-};
+    "تعرف على إذاعة القرآن الكريم من القاهرة — بث مباشر لتلاوات القرآن الكريم من مصر على مدار الساعة. Quran Radio Egypt from Cairo.",
+  path: "/about",
+  keywords: ["عن إذاعة القرآن", "Quran radio Cairo about"],
+});
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="font-amiri text-3xl font-bold text-emerald-50">
-        عن الإذاعة
-      </h1>
-      <div className="mt-6 space-y-4 text-emerald-100/90 leading-relaxed">
-        <p>
-          {RADIO_STREAM.name} منصة استماع مخصصة لبث تلاوات القرآن الكريم
-          مباشرة من القاهرة. هدفنا تقديم تجربة استماع بسيطة، سريعة، ومتوافقة
-          مع الهواتف والأجهزة اللوحية، مع احترام خصوصية المستمعين.
-        </p>
-        <p>
-          هذا المشروع واجهة حديثة للاستماع إلى البث — وليس بديلاً رسمياً عن
-          الإذاعة ما لم يتم التعاون والترخيص مع الجهة المالكة. قبل الإطلاق
-          العام، يُرجى التحقق من مصدر البث النهائي وحقوق الاستخدام.
-        </p>
-        <p>
-          نعمل على إضافة جدول البرامج، وإحصائيات أعمق للمستمعين، وتعليقات
-          مجتمعية معتمدة في المراحل القادمة.
-        </p>
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "الرئيسية", path: "/" },
+          { name: "عن الإذاعة", path: "/about" },
+        ])}
+      />
+      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+        <h1 className="font-amiri text-3xl font-bold text-emerald-50">
+          عن إذاعة القرآن الكريم من القاهرة
+        </h1>
+        <div className="mt-6 space-y-4 text-emerald-100/90 leading-relaxed">
+          <p>
+            {RADIO_STREAM.name} محطة راديو مصرية مخصصة لبث تلاوات القرآن الكريم
+            على مدار الساعة. يوفّر هذا الموقع واجهة عربية بسيطة للاستماع إلى
+            البث المباشر من القاهرة عبر الإنترنت — على الهاتف أو الكمبيوتر.
+          </p>
+          <p>
+            هدفنا تقديم تجربة استماع سريعة وواضحة لمن يبحث عن{" "}
+            <strong className="font-normal text-emerald-200">
+              بث مباشر قرآن كريم
+            </strong>{" "}
+            من مصر، مع احترام خصوصية المستمعين ودون الحاجة إلى تسجيل حساب.
+          </p>
+          <p>
+            يمكنك الاستماع الآن من{" "}
+            <Link href="/" className="text-emerald-300 underline hover:text-emerald-200">
+              الصفحة الرئيسية
+            </Link>{" "}
+            أو متابعة{" "}
+            <Link href="/schedule" className="text-emerald-300 underline hover:text-emerald-200">
+              جدول البرامج
+            </Link>{" "}
+            عند توفره.
+          </p>
+        </div>
+        <Link
+          href="/"
+          className="mt-8 inline-flex rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-500"
+        >
+          العودة للبث المباشر
+        </Link>
       </div>
-      <Link
-        href="/"
-        className="mt-8 inline-flex rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-500"
-      >
-        العودة للبث المباشر
-      </Link>
-    </div>
+    </>
   );
 }
