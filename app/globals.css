@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  --background: #06100c;
+  --foreground: #ecfdf5;
+  --accent: #10b981;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+  --font-amiri: var(--font-amiri), "Amiri", serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-amiri {
+  font-family: var(--font-amiri), "Amiri", serif;
+}
+
+/* Accessible focus for RTL */
+:focus-visible {
+  outline-color: #34d399;
+}
+
+/* Smooth range input on mobile */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.25);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: #34d399;
+  cursor: pointer;
+}
