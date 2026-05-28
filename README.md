@@ -23,7 +23,7 @@ cp .env.example .env.local
 Edit `.env.local`:
 
 - `NEXT_PUBLIC_RADIO_STREAM_URL` — verified stream URL (required before production)
-- `NEXT_PUBLIC_SITE_URL` — canonical site URL (required for SEO, sitemap, and schema)
+- `NEXT_PUBLIC_SITE_URL` — canonical site URL (use your custom domain in production; Netlify `URL` is used automatically if unset)
 
 ```bash
 npm run dev

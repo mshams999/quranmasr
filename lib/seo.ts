@@ -1,11 +1,32 @@
 import type { Metadata } from "next";
 import { RADIO_STREAM } from "./stream";
 
-const DEFAULT_SITE_URL = "https://quranmasr.com";
+const DEFAULT_SITE_URL = "https://quranmasr.netlify.app";
 
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL?.trim() || DEFAULT_SITE_URL
-).replace(/\/$/, "");
+function resolveSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (explicit && !explicit.includes("localhost")) {
+    return explicit.replace(/\/$/, "");
+  }
+
+  const netlifyUrl = process.env.URL?.trim();
+  if (netlifyUrl) {
+    return netlifyUrl.replace(/\/$/, "");
+  }
+
+  const vercelUrl = process.env.VERCEL_URL?.trim();
+  if (vercelUrl) {
+    return `https://${vercelUrl.replace(/\/$/, "")}`;
+  }
+
+  if (explicit) {
+    return explicit.replace(/\/$/, "");
+  }
+
+  return DEFAULT_SITE_URL;
+}
+
+export const SITE_URL = resolveSiteUrl();
 
 export const SITE_NAME = RADIO_STREAM.name;
 export const SITE_NAME_EN = RADIO_STREAM.nameEn;
