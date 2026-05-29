@@ -1,26 +1,40 @@
 import type { Metadata } from "next";
 import { RADIO_STREAM } from "./stream";
 
-const DEFAULT_SITE_URL = "https://quranmasr.netlify.app";
+const DEFAULT_SITE_URL = "https://quranmasr.com";
+
+function normalizeSiteUrl(url: string): string {
+  const trimmed = url.trim().replace(/\/$/, "");
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
 
 function resolveSiteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (explicit && !explicit.includes("localhost")) {
-    return explicit.replace(/\/$/, "");
+    return normalizeSiteUrl(explicit);
   }
 
   const netlifyUrl = process.env.URL?.trim();
-  if (netlifyUrl) {
-    return netlifyUrl.replace(/\/$/, "");
+  if (netlifyUrl && !netlifyUrl.includes("localhost")) {
+    return normalizeSiteUrl(netlifyUrl);
+  }
+
+  // Stable production hostname — VERCEL_URL is per-deployment and bad for SEO.
+  const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (vercelProductionUrl) {
+    return normalizeSiteUrl(vercelProductionUrl);
   }
 
   const vercelUrl = process.env.VERCEL_URL?.trim();
   if (vercelUrl) {
-    return `https://${vercelUrl.replace(/\/$/, "")}`;
+    return normalizeSiteUrl(vercelUrl);
   }
 
   if (explicit) {
-    return explicit.replace(/\/$/, "");
+    return normalizeSiteUrl(explicit);
   }
 
   return DEFAULT_SITE_URL;
