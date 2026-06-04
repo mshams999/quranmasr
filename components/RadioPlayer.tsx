@@ -1,87 +1,29 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import {
-  RADIO_STREAM,
-  STREAM_STATUS_LABELS,
-  type StreamStatus,
-} from "@/lib/stream";
+import { useId } from "react";
+import { RADIO_STREAM, STREAM_STATUS_LABELS } from "@/lib/stream";
+import { useLiveRadio } from "@/lib/useLiveRadio";
 import { ShareButton } from "./ShareButton";
 
 export function RadioPlayer() {
   const audioId = useId();
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  const [status, setStatus] = useState<StreamStatus>("idle");
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.85);
-  const [muted, setMuted] = useState(false);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const onWaiting = () => setStatus("connecting");
-    const onPlaying = () => {
-      setStatus("playing");
-      setIsPlaying(true);
-    };
-    const onPause = () => {
-      setIsPlaying(false);
-      setStatus((s) => (s === "error" ? "error" : "idle"));
-    };
-    const onError = () => {
-      setStatus("error");
-      setIsPlaying(false);
-    };
-    const onCanPlay = () => {
-      if (!audio.paused) setStatus("playing");
-    };
-
-    audio.addEventListener("waiting", onWaiting);
-    audio.addEventListener("playing", onPlaying);
-    audio.addEventListener("pause", onPause);
-    audio.addEventListener("error", onError);
-    audio.addEventListener("canplay", onCanPlay);
-
-    return () => {
-      audio.removeEventListener("waiting", onWaiting);
-      audio.removeEventListener("playing", onPlaying);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("error", onError);
-      audio.removeEventListener("canplay", onCanPlay);
-    };
-  }, []);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.volume = volume;
-    audio.muted = muted;
-  }, [volume, muted]);
-
-  const togglePlay = async () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (isPlaying) {
-      audio.pause();
-      setStatus("idle");
-      return;
-    }
-
-    setStatus("connecting");
-    try {
-      await audio.play();
-    } catch {
-      setStatus("error");
-    }
-  };
-
-  const toggleMute = () => setMuted((m) => !m);
+  const {
+    audioRef,
+    status,
+    isActive,
+    volume,
+    setVolume,
+    muted,
+    setMuted,
+    toggleMute,
+    togglePlay,
+  } = useLiveRadio();
 
   const statusLabel = STREAM_STATUS_LABELS[status];
-  const showLiveBadge = status === "playing" || status === "connecting";
+  const showLiveBadge =
+    status === "playing" ||
+    status === "connecting" ||
+    status === "reconnecting";
 
   return (
     <section
@@ -120,8 +62,6 @@ export function RadioPlayer() {
           ref={audioRef}
           id={audioId}
           preload="none"
-          src={RADIO_STREAM.streamUrl}
-          crossOrigin="anonymous"
           className="sr-only"
         >
           <track kind="captions" />
@@ -132,12 +72,12 @@ export function RadioPlayer() {
             type="button"
             onClick={togglePlay}
             className={`flex h-24 w-24 items-center justify-center rounded-full bg-emerald-500 text-[#071510] shadow-lg shadow-emerald-500/25 transition hover:scale-[1.03] hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-300 active:scale-95 sm:h-28 sm:w-28 ${
-              isPlaying ? "ring-4 ring-emerald-400/20" : ""
+              isActive ? "ring-4 ring-emerald-400/20" : ""
             }`}
-            aria-label={isPlaying ? "إيقاف مؤقت" : "تشغيل البث"}
-            aria-pressed={isPlaying}
+            aria-label={isActive ? "إيقاف مؤقت" : "تشغيل البث"}
+            aria-pressed={isActive}
           >
-            {isPlaying ? <PauseIcon /> : <PlayIcon />}
+            {isActive ? <PauseIcon /> : <PlayIcon />}
           </button>
 
           <p
